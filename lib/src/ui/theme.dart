@@ -6,7 +6,6 @@ ThemeData theme() {
   return ThemeData(
       scaffoldBackgroundColor: Colors.white,
       primaryColor: primaryColor,
-      fontFamily: "Roboto",
       textTheme: textTheme(),
       primarySwatch: Colors.blue,
       visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -22,10 +21,9 @@ ThemeData theme() {
 
 TextTheme textTheme() {
   return TextTheme(
-    bodyText1: TextStyle(color: textColor),
-    bodyText2: TextStyle(color: textColor),
-    headline1:
-        TextStyle(fontSize: 25, color: textColor, fontWeight: FontWeight.w800),
-    headline2: TextStyle(fontSize: 18),
-  );
+      bodyText1: TextStyle(color: textColor),
+      bodyText2: TextStyle(color: textColor),
+      headline1: TextStyle(
+          fontSize: 25, color: textColor, fontWeight: FontWeight.w800),
+      headline2: TextStyle(fontSize: 18));
 }

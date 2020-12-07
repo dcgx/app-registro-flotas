@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Date {
-  // DateTime date;
   String id;
   DateTime date;
   List<dynamic> hours;

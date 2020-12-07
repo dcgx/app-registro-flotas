@@ -8,6 +8,7 @@ class Hour {
   String userName;
   String userPhone;
   String pickupId;
+  DateTime date;
 
   Hour(
       {this.id,
@@ -15,7 +16,8 @@ class Hour {
       this.userId,
       this.userName,
       this.userPhone,
-      this.pickupId});
+      this.pickupId,
+      this.date});
 
   factory Hour.fromMap(Map data) {
     return Hour(

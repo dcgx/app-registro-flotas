@@ -5,9 +5,9 @@ class Pickup {
   String patent;
   String category;
   String status;
-  String user_id;
+  String userId;
 
-  Pickup({this.id, this.patent, this.category, this.status, this.user_id});
+  Pickup({this.id, this.patent, this.category, this.status, this.userId});
 
   factory Pickup.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
@@ -17,7 +17,7 @@ class Pickup {
         patent: data['patent'],
         category: data['category'],
         status: data['status'],
-        user_id: data['user_id']);
+        userId: data['user_id']);
   }
 
   factory Pickup.fromJson(Map<String, dynamic> json) {
@@ -26,6 +26,6 @@ class Pickup {
         patent: json['patent'],
         category: json['category'],
         status: json['status'],
-        user_id: json['user_id']);
+        userId: json['user_id']);
   }
 }

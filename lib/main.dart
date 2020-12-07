@@ -1,14 +1,10 @@
-import 'package:fleeve/src/providers/auth_provider.dart';
-import 'package:fleeve/src/screens/admin/admin_screen.dart';
-import 'package:fleeve/src/screens/details/user_history.dart';
-import 'package:fleeve/src/screens/details/user_table.dart';
-import 'package:fleeve/src/screens/pickups/pickups_screen.dart';
-import 'package:fleeve/src/screens/details/pickup_list.dart';
-import 'package:fleeve/src/screens/schedule/schedule_screen.dart';
+import 'package:fleeve/src/ui/screens/reservation/reservation_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fleeve/src/providers/auth_provider.dart';
+import 'package:fleeve/src/ui/screens/admin/admin_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:fleeve/src/config/theme.dart';
-import 'package:fleeve/src/screens/home/home_screen.dart';
+import 'package:fleeve/src/ui/theme.dart';
+import 'package:fleeve/src/ui/screens/home/home_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -36,16 +32,21 @@ class MyApp extends StatelessWidget {
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
-            title: 'Flutter Demo',
-            theme: theme(),
-            home: UserHistory(),
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate
-            ],
-            supportedLocales: [const Locale('es', '')],
-          );
+              title: 'Flutter Demo',
+              theme: theme(),
+              // home: HomeScreen(),
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate
+              ],
+              supportedLocales: [const Locale('es', '')],
+              initialRoute: '/',
+              routes: {
+                '/': (context) => HomeScreen(),
+                '/admin': (context) => AdminScreen(),
+                '/reservation': (context) => ReservationScreen()
+              });
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
