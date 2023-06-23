@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fleeve/src/ui/screens/auth/widgets/body.dart';
 
 class AuthScreen extends StatefulWidget {
-  AuthScreen({Key key}) : super(key: key);
+  AuthScreen({required Key? key}) : super(key: key);
 
   @override
   _AuthScreenState createState() => _AuthScreenState();
@@ -28,6 +28,6 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
         ),
         backgroundColor: Colors.white,
-        body: Body());
+        body: Body(key: null));
   }
 }

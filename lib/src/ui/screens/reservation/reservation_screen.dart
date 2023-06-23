@@ -9,7 +9,7 @@ import 'package:fleeve/src/providers/auth_provider.dart';
 import 'package:fleeve/src/ui/widgets/pickup_card.dart';
 
 class ReservationScreen extends StatelessWidget {
-  const ReservationScreen({Key key}) : super(key: key);
+  const ReservationScreen({required Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class ReservationScreen extends StatelessWidget {
         children: [
           SizedBox(
               width: 150,
-              child: RaisedButton(
+              child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -34,7 +34,7 @@ class ReservationScreen extends StatelessWidget {
                   ))),
           SizedBox(
               width: 150,
-              child: RaisedButton(
+              child: ElevatedButton(
                   onPressed: () {
                     Provider.of<AuthProvider>(context).logout();
                     Navigator.of(context).popAndPushNamed('/');
@@ -51,13 +51,13 @@ class ReservationScreen extends StatelessWidget {
                   ))),
         ],
       ),
-      body: Body(),
+      body: Body(key: key),
     );
   }
 }
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({required Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,14 +75,14 @@ class Body extends StatelessWidget {
           ),
           Text(currentUser.name,
               style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.headline1.fontSize,
+                  fontSize: Theme.of(context).textTheme.displayLarge?.fontSize,
                   fontWeight:
-                      Theme.of(context).textTheme.headline1.fontWeight)),
+                      Theme.of(context).textTheme.displayLarge?.fontWeight)),
           Text('ELIJA UNA CAMIONETA',
               style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.headline2.fontSize,
+                  fontSize: Theme.of(context).textTheme.headline2?.fontSize,
                   fontWeight:
-                      Theme.of(context).textTheme.headline2.fontWeight)),
+                      Theme.of(context).textTheme.headline2?.fontWeight)),
           Container(
               child: StreamBuilder<List<Pickup>>(
                   stream: db.streamPickups(),
@@ -97,7 +97,7 @@ class Body extends StatelessWidget {
                     }
                     return Flexible(
                       child: ListView(
-                          children: snapshot.data.map((Pickup pickup) {
+                          children: snapshot.data!.map((Pickup pickup) {
                         return Container(
                           padding: EdgeInsets.only(
                               right: MediaQuery.of(context).size.width / 30,
@@ -105,11 +105,15 @@ class Body extends StatelessWidget {
                               top: 8,
                               bottom: 8),
                           child: PickupCard(
+                              key: Key(pickup.patent),
                               pickup: pickup,
                               onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          HourReservation(pickup: pickup)))),
+                                          HourReservation(
+                                            pickup: pickup,
+                                            key: new Key(pickup.patent),
+                                          )))),
                         );
                       }).toList()),
                     );

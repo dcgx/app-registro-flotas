@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AuthForm extends StatefulWidget {
-  AuthForm({Key key}) : super(key: key);
+  AuthForm({required Key? key}) : super(key: key);
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -30,7 +30,7 @@ class _AuthFormState extends State<AuthForm> {
   );
 
   int numberIndex = 0;
-  String password;
+  String password = "";
   bool loggedIn = false;
 
   @override
@@ -55,12 +55,11 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   Widget _buildLoginButton() {
-    return RaisedButton(
+    return ElevatedButton(
         child: Text(
           'Entrar',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        textColor: Colors.white,
         onPressed: () {
           checkConnectivity().then((internet) {
             if (internet) {
@@ -68,25 +67,34 @@ class _AuthFormState extends State<AuthForm> {
                 showSnackBar(
                     context: context,
                     message: 'Ingrese contraseña',
+                    duration: Duration(seconds: 2),
                     icon: Icon(Icons.info));
               } else {
                 signIn(password);
               }
             } else {
-              AppDialog(context: context, dialogType: DialogType.INFO)..show();
+              // AppDialog(context: context, dialogType: DialogType.INFO)..show();
             }
           });
         });
   }
 
   Future<void> signIn(String password) async {
-    AppDialog(context: context, dialogType: DialogType.LOADING)..show();
+    AppDialog(
+        context: context,
+        dialogType: DialogType.LOADING,
+        body: Container(),
+        title: Text("Cargando"),
+        onpressedConfirm: () => {},
+        onPressedOk: () => {})
+      ..show();
 
     auth.signIn(this.password).then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.first.exists) {
         // var user = jsonEncode(querySnapshot.docs.first.data());
 
-        var user = User.fromJson(querySnapshot.docs.first.data());
+        var user = User.fromJson(
+            querySnapshot.docs.first.data() as Map<String, dynamic>);
 
         user.id = querySnapshot.docs.first.id;
 
@@ -97,27 +105,30 @@ class _AuthFormState extends State<AuthForm> {
               .then((_) => clearPassInput());
         } else if (user.roles.contains('driver')) {
           Navigator.of(context)
-              .push(
-                  MaterialPageRoute(builder: (context) => ReservationScreen()))
+              .push(MaterialPageRoute(
+                  builder: (context) =>
+                      ReservationScreen(key: new GlobalKey())))
               .then((_) {
             clearPassInput();
-            AppDialog(context: context)..close();
+            // AppDialog(context: context)..close();
           });
         }
       }
     }).catchError((error) {
       print(error);
-      AppDialog(context: context)..close();
+      // AppDialog(context: context)..close();
       clearPassInput();
       if (error.toString() == "Bad state: No element") {
         showSnackBar(
             context: context,
             message: 'Contraseña incorrecta',
+            duration: Duration(seconds: 2),
             icon: Icon(Icons.error));
       } else {
         showSnackBar(
             context: context,
             message: 'Error inesperado',
+            duration: Duration(seconds: 2),
             icon: Icon(Icons.error));
       }
     });
@@ -270,7 +281,8 @@ class _AuthFormState extends State<AuthForm> {
 class PasswordNumber extends StatelessWidget {
   final TextEditingController textEditingController;
   final OutlineInputBorder outlineInputBorder;
-  PasswordNumber({this.textEditingController, this.outlineInputBorder});
+  PasswordNumber(
+      {required this.textEditingController, required this.outlineInputBorder});
 
   @override
   Widget build(BuildContext context) {
@@ -301,7 +313,7 @@ class PasswordNumber extends StatelessWidget {
 class KeyboardNumber extends StatelessWidget {
   final int n;
   final Function() onPressed;
-  KeyboardNumber({this.n, this.onPressed});
+  KeyboardNumber({required this.n, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

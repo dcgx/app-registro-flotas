@@ -9,7 +9,7 @@ import 'package:fleeve/src/ui/constants.dart';
 import 'package:fleeve/src/providers/auth_provider.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({required Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,9 @@ class Body extends StatelessWidget {
         ),
         Text(currentUser.name,
             style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headline1.fontSize,
-                fontWeight: Theme.of(context).textTheme.headline1.fontWeight)),
+                fontSize: Theme.of(context).textTheme.displayLarge?.fontSize,
+                fontWeight:
+                    Theme.of(context).textTheme.displayLarge?.fontWeight)),
         Container(
             padding: EdgeInsets.all(20),
             child: GridView.count(
@@ -40,19 +41,22 @@ class Body extends StatelessWidget {
                     title: 'Elegir una hora',
                     icon: Icons.schedule,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            ReservationScreen()))),
+                        builder: (BuildContext context) => ReservationScreen(
+                              key: new GlobalKey(),
+                            )))),
                 _buildGrid(
                     title: 'Detalle de camionetas',
                     icon: Icons.drive_eta,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            PickupDetailsScreen()))),
+                        builder: (BuildContext context) => PickupDetailsScreen(
+                              key: new GlobalKey(),
+                            )))),
                 _buildGrid(
                   title: 'Detalle de choreres',
                   icon: Icons.people,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => UserDetailsScreen())),
+                      builder: (BuildContext context) =>
+                          UserDetailsScreen(key: new GlobalKey()))),
                 ),
                 _buildGrid(
                     title: 'Uso diario',
@@ -65,9 +69,9 @@ class Body extends StatelessWidget {
   }
 
   Widget _buildGrid(
-      {@required String title,
-      @required IconData icon,
-      @required Function onTap}) {
+      {required String title,
+      required IconData icon,
+      required Function onTap}) {
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.all(8),
@@ -89,7 +93,7 @@ class Body extends StatelessWidget {
         ),
         color: primaryColor,
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:fleeve/src/ui/widgets/multi_select_chip.dart';
 import 'package:flutter/material.dart';
 
 class UserDetailsScreen extends StatefulWidget {
-  const UserDetailsScreen({Key key}) : super(key: key);
+  const UserDetailsScreen({required Key? key}) : super(key: key);
 
   @override
   _UserDetailsScreenState createState() => _UserDetailsScreenState();
@@ -18,7 +18,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     "Administrador",
   ];
 
-  List<String> selectedRoleList = List();
+  List<String> selectedRoleList = [];
 
   _showReportDialog() {
     showDialog(
@@ -36,7 +36,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               },
             ),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text("Aceptar"),
                 onPressed: () => Navigator.of(context).pop(),
               )
@@ -53,13 +53,14 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(),
-      body: Body(),
+      body: Body(key: new GlobalKey()),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
           final _formKey = GlobalKey<FormState>();
 
           AppDialog(
+              onpressedConfirm: () => {},
               context: context,
               dialogType: DialogType.FORM,
               title: Text('Agregar una camioneta'),
@@ -74,10 +75,10 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                           labelText: 'Nombre y apellido *',
                           hintText: ''),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Rellenar todos los campos';
                         }
-                        return null;
+                        return null; 
                       },
                     ),
                     TextFormField(
@@ -87,7 +88,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                           labelText: 'Número de teléfono *',
                           hintText: '9XXXXXXXX'),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Rellenar todos los campos';
                         }
                         return null;
@@ -116,7 +117,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     //     );
                     //   }).toList(),
                     // ),
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text("Roles"),
                       onPressed: () => _showReportDialog(),
                     ),
@@ -125,26 +126,27 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               ),
               onPressedOk: () {
                 {
-                  if (_formKey.currentState.validate()) {
-                    List valueRoleList = List();
-                    selectedRoleList.forEach((role) {
-                      if (role == 'Administrador') {
-                        valueRoleList.add('admin');
-                      }
-                      if (role == 'Chofer') {
-                        valueRoleList.add('driver');
-                      }
-                    });
-                    User user = User(
-                        name: _userNameController.text,
-                        phone: _userPhoneController.text,
-                        roles: valueRoleList);
+                  // if (_formKey.currentState.validate()) {
+                  //   List valueRoleList = [];
+                  //   selectedRoleList.forEach((role) {
+                  //     if (role == 'Administrador') {
+                  //       valueRoleList.add('admin');
+                  //     }
+                  //     if (role == 'Chofer') {
+                  //       valueRoleList.add('driver');
+                  //     }
+                  //   });
+                  //   User user = User(
+                  //       id: '',
+                  //       name: _userNameController.text,
+                  //       phone: _userPhoneController.text,
+                  //       roles: valueRoleList);
 
-                    db.addUser(user).whenComplete(() => Navigator.pop(context));
+                  //   db.addUser(user).whenComplete(() => Navigator.pop(context));
 
-                    // Scaffold.of(context).showSnackBar(
-                    //     SnackBar(content: Text('Processing Data')));
-                  }
+                  //   // Scaffold.of(context).showSnackBar(
+                  //   //     SnackBar(content: Text('Processing Data')));
+                  // }
                 }
               })
             ..show();
@@ -155,7 +157,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 }
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({required Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -181,9 +183,9 @@ class Body extends StatelessWidget {
 
           return Container(
             child: ListView.builder(
-                itemCount: snapshot.data.length,
+                itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  User user = snapshot.data[index];
+                  User user = snapshot.data![index];
                   return ListTile(
                     leading: Icon(Icons.person),
                     title: Text(user.name),

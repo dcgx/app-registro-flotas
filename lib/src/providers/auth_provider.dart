@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:fleeve/src/models/user.dart';
 
 class AuthProvider extends ChangeNotifier {
-  User _user = new User();
+  User _user = null!;
 
-  get user {
+  User get user {
     return _user;
   }
 
@@ -23,6 +23,6 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void logout() {
-    this.user = null;
+    this.user = null!;
   }
 }

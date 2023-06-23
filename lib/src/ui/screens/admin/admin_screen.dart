@@ -6,19 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AdminScreen extends StatelessWidget {
-  const AdminScreen({Key key}) : super(key: key);
+  const AdminScreen({required Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Body(),
+      body: Body(key: key),
       bottomNavigationBar: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: 150,
-            child: RaisedButton(
+            child: ElevatedButton(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

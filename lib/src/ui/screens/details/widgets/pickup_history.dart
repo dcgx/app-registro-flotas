@@ -11,19 +11,19 @@ import 'package:fleeve/src/services/database.dart';
 
 class PickupHistory extends StatefulWidget {
   final Pickup pickup;
-  const PickupHistory({Key key, this.pickup}) : super(key: key);
+  const PickupHistory({Key? key, required this.pickup}) : super(key: key);
 
   @override
   _PickupHistoryState createState() => _PickupHistoryState();
 }
 
 class _PickupHistoryState extends State<PickupHistory> {
-  double _height;
-  double _width;
+  late double _height;
+  late double _width;
 
-  String _setDate;
+  late String _setDate;
 
-  String dateTime;
+  late String dateTime;
 
   DateTime selectedDate = DateTime.now();
 
@@ -32,7 +32,7 @@ class _PickupHistoryState extends State<PickupHistory> {
   TextEditingController _categoryController = TextEditingController();
 
   Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       locale: Locale('es', ''),
@@ -89,7 +89,7 @@ class _PickupHistoryState extends State<PickupHistory> {
                           style: TextStyle(fontSize: 20, color: Colors.white)),
                       onPressed: () {
                         setState(() {
-                          selectedDate = null;
+                          selectedDate = DateTime.now();
                           _dateController.text = "Ingrese una fecha";
                         });
                       },
@@ -117,8 +117,8 @@ class _PickupHistoryState extends State<PickupHistory> {
                           enabled: false,
                           keyboardType: TextInputType.text,
                           controller: _dateController,
-                          onSaved: (String val) {
-                            _setDate = val;
+                          onSaved: (String? val) {
+                            _setDate = val!;
                           },
                           decoration: InputDecoration(
                               disabledBorder: UnderlineInputBorder(
@@ -149,7 +149,11 @@ class _PickupHistoryState extends State<PickupHistory> {
                   }
                   var hours = snapshot.data;
 
-                  return PickupTable(hours: hours, date: selectedDate);
+                  return PickupTable(
+                    hours: hours as List<Hour>,
+                    date: selectedDate,
+                    key: new GlobalKey(),
+                  );
                 })
           ],
         ),
@@ -160,6 +164,7 @@ class _PickupHistoryState extends State<PickupHistory> {
           final _formKey = GlobalKey<FormState>();
 
           AppDialog(
+              onpressedConfirm: () => {},
               context: context,
               dialogType: DialogType.FORM,
               title: Text('Editar datos'),
@@ -175,7 +180,7 @@ class _PickupHistoryState extends State<PickupHistory> {
                           labelText: 'Patente *',
                           hintText: 'XXXX-00'),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Rellenar todos los campos';
                         }
                         if (value.length < 7 || value.length > 7) {
@@ -191,7 +196,7 @@ class _PickupHistoryState extends State<PickupHistory> {
                           labelText: 'Categoria *',
                           hintText: 'Rojo Mina, Amarillo Operacional'),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Rellenar todos los campos';
                         }
                         return null;
@@ -203,19 +208,22 @@ class _PickupHistoryState extends State<PickupHistory> {
               onPressedOk: () {
                 {
                   // Validate returns true if the form is valid, otherwise false.
-                  if (_formKey.currentState.validate()) {
-                    Pickup pickup = Pickup(
-                        id: widget.pickup.id,
-                        patent: _patentController.text.toUpperCase(),
-                        category: _categoryController.text.toUpperCase());
-                    db.updatePickup(pickup).then((_) {
-                      Navigator.pop(context);
-                      showSnackBar(
-                          context: context,
-                          message: 'Datos actualizados correctamente',
-                          icon: Icon(Icons.check));
-                    });
-                  }
+                  // if (_formKey.currentState.validate()) {
+                  //   Pickup pickup = Pickup(
+                  //       status: '',
+                  //       userId: '',
+                  //       id: widget.pickup.id,
+                  //       patent: _patentController.text.toUpperCase(),
+                  //       category: _categoryController.text.toUpperCase());
+                  //   db.updatePickup(pickup).then((_) {
+                  //     Navigator.pop(context);
+                  //     showSnackBar(
+                  //         context: context,
+                  //         message: 'Datos actualizados correctamente',
+                  //         duration: Duration(seconds: 2),
+                  //         icon: Icon(Icons.check));
+                  //   });
+                  // }
                 }
               })
             ..show();

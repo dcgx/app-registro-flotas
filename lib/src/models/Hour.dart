@@ -11,13 +11,13 @@ class Hour {
   DateTime date;
 
   Hour(
-      {this.id,
-      this.hour,
-      this.userId,
-      this.userName,
-      this.userPhone,
-      this.pickupId,
-      this.date});
+      {required this.id,
+      required this.hour,
+      required this.userId,
+      required this.userName,
+      required this.userPhone,
+      required this.pickupId,
+      required this.date});
 
   factory Hour.fromMap(Map data) {
     return Hour(
@@ -27,19 +27,21 @@ class Hour {
       userName: data['user_name'] ?? '',
       userPhone: data['user_phone'] ?? '',
       pickupId: data['pickup_id'] ?? '',
+      date: DateTime.now(),
     );
   }
 
   factory Hour.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data();
+    Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
 
     return Hour(
       id: doc.id,
-      hour: data['hour'],
-      userId: data['user_id'] ?? '',
-      userName: data['user_name'] ?? '',
-      userPhone: data['user_phone'] ?? '',
-      pickupId: data['pickup_id'] ?? '',
+      hour: data?['hour'],
+      userId: data?['user_id'] ?? '',
+      userName: data?['user_name'] ?? '',
+      userPhone: data?['user_phone'] ?? '',
+      pickupId: data?['pickup_id'] ?? '',
+      date: DateTime.now(),
     );
   }
 }

@@ -6,7 +6,11 @@ class User {
   String phone;
   List<dynamic> roles;
 
-  User({this.id, this.name, this.phone, this.roles});
+  User(
+      {required this.id,
+      required this.name,
+      required this.phone,
+      required this.roles});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -16,20 +20,22 @@ class User {
         roles: json['roles']);
   }
 
-  factory User.fromMap(Map data) {
+  factory User.fromMap(Map<String, dynamic> data) {
     return User(
-        id: data['name'] ?? '',
-        name: data['name'] ?? '',
-        phone: data['phone'] ?? '',
-        roles: data['roles'] ?? '');
+      id: data['id'],
+      name: data['name'],
+      phone: data['phone'],
+      roles: List<dynamic>.from(data['roles']),
+    );
   }
+
   factory User.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data();
+    Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
 
     return User(
         id: doc.id,
-        name: data['name'] ?? '',
-        phone: data['phone'] ?? '',
-        roles: data['roles'] ?? '');
+        name: data?['name'] ?? '',
+        phone: data?['phone'] ?? '',
+        roles: data?['roles'] ?? '');
   }
 }

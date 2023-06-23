@@ -11,7 +11,8 @@ import 'package:fleeve/src/ui/widgets/dialog.dart';
 class ConfirmButton extends StatelessWidget {
   final List<int> selectedHours;
   final Pickup pickup;
-  const ConfirmButton({Key key, this.selectedHours, this.pickup})
+  const ConfirmButton(
+      {required Key? key, required this.selectedHours, required this.pickup})
       : super(key: key);
 
   @override
@@ -21,15 +22,18 @@ class ConfirmButton extends StatelessWidget {
 
     return SizedBox(
         width: 150,
-        child: RaisedButton(
+        child: ElevatedButton(
             onPressed: () {
               if (selectedHours.isEmpty) {
                 showSnackBar(
-                    context: context,
-                    message: 'Seleccionar una hora',
-                    icon: Icon(Icons.info));
+                  context: context,
+                  message: 'Seleccionar una hora',
+                  icon: Icon(Icons.info),
+                  duration: Duration(seconds: 2),
+                );
               } else {
                 AppDialog(
+                    onPressedOk: () => {},
                     context: context,
                     dialogType: DialogType.CONFIRMATION,
                     title: Text('Confirmar hora'),
@@ -42,8 +46,12 @@ class ConfirmButton extends StatelessWidget {
                     onpressedConfirm: () {
                       db.addHoursToDate(selectedHours, currentUser, pickup);
                       AppDialog(
-                          context: context, dialogType: DialogType.LOADING);
-                      AppDialog(context: context)..close();
+                          body: ListBody(),
+                          title: Text('Cargando...'),
+                          onpressedConfirm: () => {},
+                          onPressedOk: () => {},
+                          context: context,
+                          dialogType: DialogType.LOADING);
                       showSnackBar(
                           context: context,
                           message: 'Hora confirmada correctamente',

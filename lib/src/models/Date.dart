@@ -5,15 +5,15 @@ class Date {
   DateTime date;
   List<dynamic> hours;
 
-  Date({this.id, this.date, this.hours});
+  Date({required this.id, required this.date, required this.hours});
 
   factory Date.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data();
+    Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
 
     return Date(
       id: doc.id,
-      date: data['date'] ?? '',
-      hours: data['hours'] ?? '',
+      date: (data?["date"] as Timestamp?)?.toDate() ?? DateTime.now(),
+      hours: data?["hours"] as List<dynamic>? ?? [],
     );
   }
 

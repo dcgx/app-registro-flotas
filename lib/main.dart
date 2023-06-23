@@ -43,9 +43,12 @@ class MyApp extends StatelessWidget {
               supportedLocales: [const Locale('es', '')],
               initialRoute: '/',
               routes: {
-                '/': (context) => HomeScreen(),
-                '/admin': (context) => AdminScreen(),
-                '/reservation': (context) => ReservationScreen()
+                '/': (context) => HomeScreen(
+                      key: new GlobalKey(),
+                    ),
+                '/admin': (context) => AdminScreen(key: new GlobalKey()),
+                '/reservation': (context) =>
+                    ReservationScreen(key: new GlobalKey())
               });
         }
 

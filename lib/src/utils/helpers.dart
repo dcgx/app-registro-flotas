@@ -2,11 +2,11 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 
 void showSnackBar(
-    {@required BuildContext context,
-    @required String message,
-    @required Icon icon,
-    Duration duration}) {
-  Scaffold.of(context).showSnackBar(SnackBar(
+    {required BuildContext context,
+    required String message,
+    required Icon icon,
+    required Duration duration}) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Row(
       children: <Widget>[
         icon,
@@ -69,6 +69,10 @@ String getMonthName(DateTime date) {
       break;
     case 12:
       month = "Diciembre";
+      break;
+    default:
+      month =
+          ""; // Valor predeterminado cuando el mes no coincide con ninguno de los casos anteriores
       break;
   }
 

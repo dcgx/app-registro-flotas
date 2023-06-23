@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fleeve/src/ui/screens/auth/auth_screen.dart';
 
 class Body extends StatefulWidget {
-  Body({Key key}) : super(key: key);
+  Body({required Key? key}) : super(key: key);
 
   @override
   _BodyState createState() => _BodyState();
@@ -21,7 +21,7 @@ class _BodyState extends State<Body> {
       ),
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AuthScreen()));
+            context, MaterialPageRoute(builder: (context) => AuthScreen(key: new GlobalKey())));
       },
     );
   }
@@ -40,11 +40,11 @@ class _BodyState extends State<Body> {
           Text('USO DE ',
               style: TextStyle(
                   color: Color(0xFF183863),
-                  fontSize: Theme.of(context).textTheme.headline1.fontSize)),
+                  fontSize: Theme.of(context).textTheme.headline1?.fontSize)),
           Text('CAMIONETAS',
               style: TextStyle(
                   color: Color(0xFF183863),
-                  fontSize: Theme.of(context).textTheme.headline1.fontSize)),
+                  fontSize: Theme.of(context).textTheme.headline1?.fontSize)),
           SizedBox(
             height: MediaQuery.of(context).size.height / 4,
           ),
@@ -57,7 +57,7 @@ class _BodyState extends State<Body> {
           Divider(
             height: 60,
           ),
-          FlatButton(
+          TextButton(
             child: Text('Instructivo de la APP'),
             onPressed: () {},
           ),

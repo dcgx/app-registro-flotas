@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:fleeve/src/ui/constants.dart';
 import 'package:fleeve/src/models/hour.dart';
 import 'package:fleeve/src/models/user.dart';
@@ -8,26 +10,26 @@ import 'package:intl/intl.dart';
 
 class UserHistory extends StatefulWidget {
   final User user;
-  const UserHistory({Key key, this.user}) : super(key: key);
+  const UserHistory({Key? key, required this.user}) : super(key: key);
 
   @override
   _UserHistoryState createState() => _UserHistoryState();
 }
 
 class _UserHistoryState extends State<UserHistory> {
-  double _height;
-  double _width;
+  late double _height;
+  late double _width;
 
-  String _setDate;
+  late String _setDate;
 
-  String dateTime;
+  late String dateTime;
 
   DateTime selectedDate = DateTime.now();
 
   TextEditingController _dateController = TextEditingController();
 
   Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       locale: Locale('es', ''),
@@ -82,8 +84,8 @@ class _UserHistoryState extends State<UserHistory> {
                   enabled: false,
                   keyboardType: TextInputType.text,
                   controller: _dateController,
-                  onSaved: (String val) {
-                    _setDate = val;
+                  onSaved: (String? val) {
+                    _setDate = val!;
                   },
                   decoration: InputDecoration(
                       disabledBorder:
@@ -111,7 +113,11 @@ class _UserHistoryState extends State<UserHistory> {
                     );
                   }
                   var hours = snapshot.data;
-                  return UserTable(hours: hours, date: selectedDate);
+                  return UserTable(
+                    hours: hours as List<Hour>,
+                    date: selectedDate,
+                    key: new GlobalKey(),
+                  );
                 })
           ],
         ),

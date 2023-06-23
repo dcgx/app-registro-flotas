@@ -5,12 +5,13 @@ class PickupCard extends StatelessWidget {
   final Pickup pickup;
   final Function onTap;
 
-  const PickupCard({Key key, @required this.pickup, this.onTap})
+  const PickupCard(
+      {required Key? key, required this.pickup, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color patentCardColor;
+    Color patentCardColor = Colors.white;
     if (pickup.status == "NO DISPONIBLE") {
       patentCardColor = Colors.red;
     } else if (pickup.status == "SEMIDISPONIBLE") {
@@ -24,7 +25,9 @@ class PickupCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
-        onTap: onTap ?? null,
+        onTap: () {
+          onTap();
+        },
         child: ListTile(
           title: FittedBox(
             fit: BoxFit.scaleDown,

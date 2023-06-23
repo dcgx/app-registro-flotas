@@ -13,7 +13,11 @@ class HourList extends StatefulWidget {
   final List<int> selectedHours;
   final List<dynamic> totalHoursByDate;
   final Pickup pickup;
-  HourList({Key key, this.selectedHours, this.totalHoursByDate, this.pickup})
+  HourList(
+      {Key? key,
+      required this.selectedHours,
+      required this.totalHoursByDate,
+      required this.pickup})
       : super(key: key);
 
   @override
@@ -36,7 +40,7 @@ class _HourListState extends State<HourList> {
           var hourByDate = this.widget.totalHoursByDate[index];
 
           bool enabled = true;
-          Color backgroundColor;
+          Color backgroundColor = Colors.white;
 
           if (hourByDate.userId != null) {
             if (hourByDate.userId == currentUser.id) {
@@ -56,6 +60,7 @@ class _HourListState extends State<HourList> {
                     iconSize: MediaQuery.of(context).size.width / 15,
                     icon: Icon(Icons.cancel),
                     onPressed: () => AppDialog(
+                        onPressedOk: () => {},
                         context: context,
                         dialogType: DialogType.CONFIRMATION,
                         title: Text('Eliminar hora'),
@@ -73,6 +78,7 @@ class _HourListState extends State<HourList> {
                             showSnackBar(
                                 context: context,
                                 message: 'Hora eliminada correctamente',
+                                duration: Duration(seconds: 2),
                                 icon: Icon(Icons.delete));
                           });
                         })
@@ -91,7 +97,7 @@ class _HourListState extends State<HourList> {
             leading: Padding(
               padding: const EdgeInsets.only(bottom: 0),
               child: ChoiceChip(
-                backgroundColor: backgroundColor,
+                backgroundColor: backgroundColor ?? Colors.white,
                 elevation: 5,
                 // padding: EdgeInsets.all(8),
                 label: Text('$hour:00'),

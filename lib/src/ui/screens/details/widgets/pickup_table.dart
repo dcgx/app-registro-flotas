@@ -8,7 +8,8 @@ import 'package:fleeve/src/models/hour.dart';
 class PickupTable extends StatelessWidget {
   final DateTime date;
   final List<Hour> hours;
-  const PickupTable({Key key, this.date, this.hours}) : super(key: key);
+  const PickupTable({required Key key, required this.date, required this.hours})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class PickupTable extends StatelessWidget {
                             ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         }
-                        User user = snapshot.data;
+                        User user = snapshot.data as User;
                         String formattedDate;
                         // Verifica si se ingresó la fecha en el calendario
                         if (date != null) {

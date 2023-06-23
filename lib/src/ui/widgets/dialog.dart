@@ -12,12 +12,12 @@ class AppDialog {
   final void Function() onPressedOk;
 
   AppDialog(
-      {@required this.context,
+      {required this.context,
       this.dialogType = DialogType.INFO,
-      this.body,
-      this.title,
-      this.onpressedConfirm,
-      this.onPressedOk});
+      required this.body,
+      required this.title,
+      required this.onpressedConfirm,
+      required this.onPressedOk});
 
   Future show() => showDialog(
       context: this.context,
@@ -34,7 +34,7 @@ class AppDialog {
                 ),
               ),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: Text('OK'),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -48,14 +48,16 @@ class AppDialog {
               title: title ?? null,
               content: SingleChildScrollView(child: body != null ? body : null),
               actions: <Widget>[
-                RaisedButton(
-                  color: secondaryColor,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: secondaryColor,
+                  ),
                   child: Text('Cancelar'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Text('Confirmar'),
                   onPressed: onpressedConfirm,
                 )
@@ -88,7 +90,7 @@ class AppDialog {
               title: title ?? null,
               content: SingleChildScrollView(child: body ?? null),
               actions: <Widget>[
-                FlatButton(child: Text('OK'), onPressed: onPressedOk)
+                TextButton(child: Text('OK'), onPressed: onPressedOk)
               ],
             );
             break;
