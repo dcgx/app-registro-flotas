@@ -18,7 +18,7 @@ class DatabaseService {
   Future<User> getUser(String id) async {
     var snapshot = await _db.collection('users').doc(id).get();
 
-    return User.fromMap(snapshot.data());
+    return User.fromMap(snapshot.data() as Map<String, dynamic>);
   }
 
   Future<void> addUser(User user) async {
@@ -155,15 +155,15 @@ class DatabaseService {
 
       ref.snapshots().forEach((element) {
         element.docs.forEach((element) {
-          print(element.reference.parent.parent.id);
+          print(element.reference.parent.parent?.id);
         });
       });
       return ref.snapshots().map((list) => list.docs.map((hour) {
             // Obtiene y agrega al fecha correspondiente a la hora
 
-            var date = hour.reference.parent.parent.id;
+            var date = hour.reference.parent.parent?.id;
             var hourData = Hour.fromFirestore(hour);
-            hourData.date = DateTime.parse(date);
+            hourData.date = DateTime.parse(date!);
 
             return hourData;
           }).toList());
@@ -175,19 +175,23 @@ class DatabaseService {
 
     return pickupRef
         .snapshots()
-        .map((pickup) => Pickup.fromJson(pickup.data()));
+        .map((pickup) => Pickup.fromJson(pickup.data() as Map<String, dynamic>));
   }
 
   Stream<User> streamUserById(String userId) {
     var userRef = _db.collection('users').doc(userId);
 
-    return userRef.snapshots().map((user) => User.fromJson(user.data()));
+    return userRef
+        .snapshots()
+        .map((user) => User.fromJson(user.data() as Map<String, dynamic>));
   }
 
   Future<User> getUserById(String userId) {
     var userRef = _db.collection('users').doc(userId);
 
-    return userRef.snapshots().map((user) => User.fromJson(user.data())).first;
+    return userRef.get().then((user) {
+      return User.fromJson(user.data() as Map<String, dynamic>);
+    });
   }
 
   Future<void> changeStatusPickup(String status, String pickupId) async {

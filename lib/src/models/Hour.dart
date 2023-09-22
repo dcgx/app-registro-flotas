@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Hour {
   // DateTime date;
-  String id;
-  int hour;
-  String userId;
-  String userName;
-  String userPhone;
-  String pickupId;
-  DateTime date;
+  String? id;
+  int? hour;
+  String? userId;
+  String? userName;
+  String? userPhone;
+  String? pickupId;
+  DateTime? date;
 
   Hour(
       {this.id,
@@ -31,15 +31,15 @@ class Hour {
   }
 
   factory Hour.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data();
+    final Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
 
     return Hour(
       id: doc.id,
-      hour: data['hour'],
-      userId: data['user_id'] ?? '',
-      userName: data['user_name'] ?? '',
-      userPhone: data['user_phone'] ?? '',
-      pickupId: data['pickup_id'] ?? '',
+      hour: data?['hour'],
+      userId: data?['user_id'] ?? '',
+      userName: data?['user_name'] ?? '',
+      userPhone: data?['user_phone'] ?? '',
+      pickupId: data?['pickup_id'] ?? '',
     );
   }
 }

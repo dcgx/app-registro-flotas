@@ -9,7 +9,7 @@ import 'package:fleeve/src/models/pickup.dart';
 class UserTable extends StatelessWidget {
   final DateTime date;
   final List<Hour> hours;
-  const UserTable({Key key, this.date, this.hours}) : super(key: key);
+  const UserTable({Key? key, required this.date, required this.hours}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class UserTable extends StatelessWidget {
                             ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         }
-                        Pickup pickup = snapshot.data;
+                        Pickup pickup = snapshot.data!;
                         return ListTile(
                             title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

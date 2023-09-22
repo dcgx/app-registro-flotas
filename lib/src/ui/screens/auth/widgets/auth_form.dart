@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fleeve/src/models/user.dart';
 import 'package:fleeve/src/providers/auth_provider.dart';
 import 'package:fleeve/src/services/authentication.dart';
+import 'package:fleeve/src/ui/constants.dart';
 import 'package:fleeve/src/ui/screens/reservation/reservation_screen.dart';
 import 'package:fleeve/src/ui/widgets/dialog.dart';
 import 'package:fleeve/src/utils/helpers.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AuthForm extends StatefulWidget {
-  AuthForm({Key key}) : super(key: key);
+  AuthForm({Key? key}) : super(key: key);
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -30,7 +31,7 @@ class _AuthFormState extends State<AuthForm> {
   );
 
   int numberIndex = 0;
-  String password;
+  String? password;
   bool loggedIn = false;
 
   @override
@@ -55,23 +56,27 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   Widget _buildLoginButton() {
-    return RaisedButton(
+    return TextButton(
         child: Text(
           'Entrar',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        textColor: Colors.white,
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)))),
         onPressed: () {
           checkConnectivity().then((internet) {
             if (internet) {
-              if (password.isEmpty) {
-                showSnackBar(
-                    context: context,
-                    message: 'Ingrese contraseña',
-                    icon: Icon(Icons.info));
-              } else {
-                signIn(password);
-              }
+              // if (password.isEmpty) {
+              //   showSnackBar(
+              //       context: context,
+              //       message: 'Ingrese contraseña',
+              //       icon: Icon(Icons.info));
+              // } else {
+              //   signIn(password);
+              // }
             } else {
               AppDialog(context: context, dialogType: DialogType.INFO)..show();
             }
@@ -82,11 +87,11 @@ class _AuthFormState extends State<AuthForm> {
   Future<void> signIn(String password) async {
     AppDialog(context: context, dialogType: DialogType.LOADING)..show();
 
-    auth.signIn(this.password).then((QuerySnapshot querySnapshot) {
+    auth.signIn(this.password!).then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.first.exists) {
         // var user = jsonEncode(querySnapshot.docs.first.data());
 
-        var user = User.fromJson(querySnapshot.docs.first.data());
+        User user = User.fromJson(querySnapshot.docs.first.data() as Map<String, dynamic>);
 
         user.id = querySnapshot.docs.first.id;
 
@@ -270,7 +275,7 @@ class _AuthFormState extends State<AuthForm> {
 class PasswordNumber extends StatelessWidget {
   final TextEditingController textEditingController;
   final OutlineInputBorder outlineInputBorder;
-  PasswordNumber({this.textEditingController, this.outlineInputBorder});
+  PasswordNumber({required this.textEditingController, required this.outlineInputBorder});
 
   @override
   Widget build(BuildContext context) {
@@ -301,7 +306,7 @@ class PasswordNumber extends StatelessWidget {
 class KeyboardNumber extends StatelessWidget {
   final int n;
   final Function() onPressed;
-  KeyboardNumber({this.n, this.onPressed});
+  KeyboardNumber({required this.n, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

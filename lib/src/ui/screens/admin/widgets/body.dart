@@ -1,7 +1,6 @@
 import 'package:fleeve/src/ui/screens/details/pickup_details_screen.dart';
 import 'package:fleeve/src/ui/screens/details/user_details_screen.dart';
 import 'package:fleeve/src/ui/screens/reservation/reservation_screen.dart';
-import 'package:fleeve/src/ui/screens/reservation/widgets/hour_reservation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +8,7 @@ import 'package:fleeve/src/ui/constants.dart';
 import 'package:fleeve/src/providers/auth_provider.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +20,10 @@ class Body extends StatelessWidget {
           width: 200,
           image: AssetImage('assets/img/logo.png'),
         ),
-        Text(currentUser.name,
+        Text(currentUser!.name,
             style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headline1.fontSize,
-                fontWeight: Theme.of(context).textTheme.headline1.fontWeight)),
+                fontSize: Theme.of(context).textTheme.displayLarge!.fontSize,
+                fontWeight: Theme.of(context).textTheme.displayLarge!.fontWeight)),
         Container(
             padding: EdgeInsets.all(20),
             child: GridView.count(
@@ -65,9 +64,9 @@ class Body extends StatelessWidget {
   }
 
   Widget _buildGrid(
-      {@required String title,
-      @required IconData icon,
-      @required Function onTap}) {
+      {@required String? title,
+      @required IconData? icon,
+      @required Function? onTap}) {
     return GestureDetector(
       child: Container(
         padding: EdgeInsets.all(8),
@@ -77,7 +76,7 @@ class Body extends StatelessWidget {
             Icon(icon, size: 65, color: Colors.white),
             Center(
               child: Text(
-                title,
+                title ?? '',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
@@ -89,7 +88,7 @@ class Body extends StatelessWidget {
         ),
         color: primaryColor,
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 }

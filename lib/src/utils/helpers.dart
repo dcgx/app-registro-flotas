@@ -1,12 +1,13 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 
-void showSnackBar(
-    {@required BuildContext context,
-    @required String message,
-    @required Icon icon,
-    Duration duration}) {
-  Scaffold.of(context).showSnackBar(SnackBar(
+void showSnackBar({
+  required BuildContext context,
+  required String message,
+  required Icon icon,
+  Duration? duration,
+}) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Row(
       children: <Widget>[
         icon,
@@ -16,12 +17,12 @@ void showSnackBar(
         )
       ],
     ),
-    duration: duration != null ? duration : Duration(seconds: 1),
+    duration: duration ?? Duration(seconds: 1),
   ));
 }
 
 Future<bool> checkConnectivity() async {
-  var connectivityResult = await (Connectivity().checkConnectivity());
+  var connectivityResult = await Connectivity().checkConnectivity();
   if (connectivityResult == ConnectivityResult.mobile) {
     return true;
   } else if (connectivityResult == ConnectivityResult.wifi) {
@@ -31,7 +32,7 @@ Future<bool> checkConnectivity() async {
 }
 
 String getMonthName(DateTime date) {
-  String month;
+  String? month;
 
   switch (date.month) {
     case 1:
@@ -72,5 +73,5 @@ String getMonthName(DateTime date) {
       break;
   }
 
-  return month.toLowerCase();
+  return month?.toLowerCase() ?? "";
 }

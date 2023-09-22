@@ -8,26 +8,27 @@ import 'package:intl/intl.dart';
 
 class UserHistory extends StatefulWidget {
   final User user;
-  const UserHistory({Key key, this.user}) : super(key: key);
+
+  const UserHistory({Key? key, required this.user}) : super(key: key);
 
   @override
   _UserHistoryState createState() => _UserHistoryState();
 }
 
 class _UserHistoryState extends State<UserHistory> {
-  double _height;
-  double _width;
+  double? _height;
+  double? _width;
 
-  String _setDate;
+  String? _setDate;
 
-  String dateTime;
+  String? dateTime;
 
   DateTime selectedDate = DateTime.now();
 
   TextEditingController _dateController = TextEditingController();
 
   Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       locale: Locale('es', ''),
@@ -35,17 +36,19 @@ class _UserHistoryState extends State<UserHistory> {
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
-    if (picked != null)
+    if (picked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = picked!;
         _dateController.text =
             DateFormat('d/MMM/yyyy', 'es').format(selectedDate);
       });
+    }
   }
 
   @override
   void initState() {
     _dateController.text = "Ingrese una fecha";
+    super.initState();
   }
 
   @override
@@ -55,13 +58,16 @@ class _UserHistoryState extends State<UserHistory> {
     _width = MediaQuery.of(context).size.width;
     dateTime = DateFormat.yMd().format(DateTime.now());
     User user = this.widget.user;
+
+    String userName = user.name ?? "Usuario Desconocido"; // Safely access user.name
+
     return Scaffold(
       appBar: AppBar(),
       body: Container(
         child: Column(
           children: [
             Text('Registro de horas'),
-            Text("Usuario: ${user.name}"),
+            Text("Usuario: $userName"), // Use userName
             InkWell(
               onTap: () {
                 setState(() {
@@ -69,8 +75,8 @@ class _UserHistoryState extends State<UserHistory> {
                 });
               },
               child: Container(
-                width: _width / 2,
-                height: _height / 14,
+                width: _width! / 2,
+                height: _height! / 14,
                 margin: EdgeInsets.only(top: 15),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
@@ -82,8 +88,8 @@ class _UserHistoryState extends State<UserHistory> {
                   enabled: false,
                   keyboardType: TextInputType.text,
                   controller: _dateController,
-                  onSaved: (String val) {
-                    _setDate = val;
+                  onSaved: (String? val) {
+                    _setDate = val!;
                   },
                   decoration: InputDecoration(
                       disabledBorder:
@@ -93,7 +99,6 @@ class _UserHistoryState extends State<UserHistory> {
               ),
             ),
             StreamBuilder<List<Hour>>(
-                // stream: db.streamUserHours(selectedDate, user.id),
                 stream: db.streamUserHours(selectedDate, user.id),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
@@ -111,7 +116,7 @@ class _UserHistoryState extends State<UserHistory> {
                     );
                   }
                   var hours = snapshot.data;
-                  return UserTable(hours: hours, date: selectedDate);
+                  return UserTable(hours: hours!, date: selectedDate);
                 })
           ],
         ),

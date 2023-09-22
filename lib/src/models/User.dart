@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  String id;
-  String name;
-  String phone;
-  List<dynamic> roles;
+  String? id;
+  String? name;
+  String? phone;
+  List<dynamic>? roles;
 
   User({this.id, this.name, this.phone, this.roles});
 
@@ -24,12 +24,12 @@ class User {
         roles: data['roles'] ?? '');
   }
   factory User.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data();
+    final Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
 
     return User(
         id: doc.id,
-        name: data['name'] ?? '',
-        phone: data['phone'] ?? '',
-        roles: data['roles'] ?? '');
+        name: data?['name'] ?? '',
+        phone: data?['phone'] ?? '',
+        roles: data?['roles'] ?? '');
   }
 }

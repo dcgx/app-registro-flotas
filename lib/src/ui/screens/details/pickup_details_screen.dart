@@ -6,7 +6,7 @@ import 'package:fleeve/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 
 class PickupDetailsScreen extends StatelessWidget {
-  const PickupDetailsScreen({Key key}) : super(key: key);
+  const PickupDetailsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +38,12 @@ class PickupDetailsScreen extends StatelessWidget {
                           labelText: 'Patente *',
                           hintText: 'XXXX-00'),
                       validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Rellenar todos los campos';
-                        }
-                        if (value.length < 7 || value.length > 7) {
-                          return 'Formato incorrecto (Ej. BBDB-10)';
-                        }
+                        // if (value.isEmpty) {
+                        //   return 'Rellenar todos los campos';
+                        // }
+                        // if (value.length < 7 || value.length > 7) {
+                        //   return 'Formato incorrecto (Ej. BBDB-10)';
+                        // }
                         return null;
                       },
                     ),
@@ -54,9 +54,9 @@ class PickupDetailsScreen extends StatelessWidget {
                           labelText: 'Categoria *',
                           hintText: 'Rojo Mina, Amarillo Operacional'),
                       validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Rellenar todos los campos';
-                        }
+                        // if (value.isEmpty) {
+                        //   return 'Rellenar todos los campos';
+                        // }
                         return null;
                       },
                     ),
@@ -66,7 +66,7 @@ class PickupDetailsScreen extends StatelessWidget {
               onPressedOk: () {
                 {
                   // Validate returns true if the form is valid, otherwise false.
-                  if (_formKey.currentState.validate()) {
+                  if (_formKey.currentState!.validate()) {
                     Pickup pickup = Pickup(
                         patent: _patentController.text.toUpperCase(),
                         category: _categoryController.text);
@@ -88,7 +88,7 @@ class PickupDetailsScreen extends StatelessWidget {
 }
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -113,13 +113,13 @@ class Body extends StatelessWidget {
               );
             }
             return ListView.builder(
-                itemCount: snapshot.data.length,
+                itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
-                  Pickup pickup = snapshot.data[index];
+                  Pickup pickup = snapshot.data![index];
                   return ListTile(
                       leading: Icon(Icons.drive_eta),
-                      title: Text(snapshot.data[index].patent),
-                      subtitle: Text(snapshot.data[index].category),
+                      title: Text(snapshot.data![index].patent),
+                      subtitle: Text(snapshot.data![index].category),
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(

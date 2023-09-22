@@ -1,24 +1,22 @@
-import 'package:fleeve/src/ui/screens/reservation/widgets/confirm_button.dart';
-import 'package:fleeve/src/ui/screens/reservation/widgets/hour_list.dart';
 import 'package:flutter/material.dart';
-
-import 'package:fleeve/src/models/pickup.dart';
-
 import 'package:intl/intl.dart';
 
+import 'package:fleeve/src/models/pickup.dart';
 import 'package:fleeve/src/models/hour.dart';
-
-import 'package:fleeve/src/ui/constants.dart';
 import 'package:fleeve/src/services/database.dart';
 import 'package:fleeve/src/ui/widgets/pickup_card.dart';
+import 'package:fleeve/src/ui/screens/reservation/widgets/confirm_button.dart';
+import 'package:fleeve/src/ui/screens/reservation/widgets/hour_list.dart';
+import 'package:fleeve/src/ui/constants.dart';
 
 class HourReservation extends StatelessWidget {
   final Pickup pickup;
-  const HourReservation({Key key, this.pickup}) : super(key: key);
+
+  const HourReservation({Key? key, required this.pickup}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<int> selectedHours = List<int>();
+    List<int> selectedHours = [];
 
     return Scaffold(
       appBar: AppBar(
@@ -32,19 +30,21 @@ class HourReservation extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(
-              width: 150,
-              child: RaisedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Icon(Icons.arrow_back),
-                      Text(
-                        'Volver',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ],
-                  ))),
+            width: 150,
+            child: TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Icon(Icons.arrow_back),
+                  Text(
+                    'Volver',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ],
+              ),
+            ),
+          ),
           ConfirmButton(selectedHours: selectedHours, pickup: pickup),
         ],
       ),
@@ -56,7 +56,7 @@ class Body extends StatefulWidget {
   final List<int> selectedHours;
   final Pickup pickup;
 
-  Body({Key key, this.selectedHours, this.pickup}) : super(key: key);
+  Body({Key? key, required this.selectedHours, required this.pickup}) : super(key: key);
 
   @override
   _BodyState createState() => _BodyState();
@@ -64,52 +64,33 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   DatabaseService db = DatabaseService();
+  List<Hour> hours = [];
+  List<Hour> totalHoursByDate = List<Hour>.filled(11, Hour()); // Initialize with 11 empty Hour objects
 
-  List<dynamic> hours = [];
-  List<dynamic> totalHoursByDate = [];
   @override
   Widget build(BuildContext context) {
-    Hour hour = Hour();
     String currentTime = DateFormat('HH:mm').format(DateTime.now());
     String currentDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
 
-    for (int i = 0; i < 11; i++) {
-      hour.hour = i + 8;
-      totalHoursByDate.add(hour);
-    }
     return StreamBuilder<List<Hour>>(
-        stream: db.streamHours(this.widget.pickup),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            print("has error");
-          }
+      stream: db.streamHours(this.widget.pickup),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          print("has error");
+        }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-          hours = snapshot.data;
+        hours = snapshot.data ?? [];
 
-          if (hours.isNotEmpty &&
-              hours.length < 11 &&
-              widget.pickup.status != "SEMIDISPONIBLE") {
-            db.changeStatusPickup('SEMIDISPONIBLE', widget.pickup.id);
-          }
+        hours.forEach((hour) {
+          totalHoursByDate[hour.hour - 8] = hour;
+        });
 
-          if (hours.length == 11 && widget.pickup.status != "NO DISPONIBLE") {
-            db.changeStatusPickup('NO DISPONIBLE', widget.pickup.id);
-          }
-
-          if (hours.isEmpty && widget.pickup.status != "DISPONIBLE") {
-            db.changeStatusPickup('DISPONIBLE', widget.pickup.id);
-          }
-
-          hours.forEach((hour) {
-            totalHoursByDate[hour.hour - 8] = hour;
-          });
-
-          return Container(
-              child: Column(
+        return Container(
+          child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -125,9 +106,10 @@ class _BodyState extends State<Body> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildHeaderTitle(
-                          title: '$currentTime h.',
-                          icon: Icon(Icons.watch_later_outlined)),
-                      _buildHeaderTitle(title: currentDate)
+                        title: '$currentTime h.',
+                        icon: Icon(Icons.watch_later_outlined),
+                      ),
+                      _buildHeaderTitle(title: currentDate),
                     ],
                   ),
                 ],
@@ -138,18 +120,23 @@ class _BodyState extends State<Body> {
                 pickup: widget.pickup,
               ),
             ],
-          ));
-        });
+          ),
+        );
+      },
+    );
   }
 
-  Widget _buildHeaderTitle({String title, Icon icon}) {
+  Widget _buildHeaderTitle({String? title, Icon? icon}) {
     return Row(
       children: [
         icon ?? Text(''),
         Text(
-          title,
+          title ?? '',
           style: TextStyle(
-              color: primaryColor, fontSize: 22, fontWeight: FontWeight.w500),
+            color: primaryColor,
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );

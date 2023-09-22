@@ -2,7 +2,7 @@ import 'package:fleeve/src/ui/screens/auth/widgets/auth_form.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatefulWidget {
-  Body({Key key}) : super(key: key);
+  Body({Key? key}) : super(key: key);
 
   @override
   _BodyState createState() => _BodyState();

@@ -1,23 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Pickup {
-  String id;
-  String patent;
-  String category;
-  String status;
-  String userId;
+  String? id;
+  String? patent;
+  String? category;
+  String? status;
+  String? userId;
 
   Pickup({this.id, this.patent, this.category, this.status, this.userId});
 
   factory Pickup.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data();
+    final Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
 
     return Pickup(
         id: doc.id,
-        patent: data['patent'],
-        category: data['category'],
-        status: data['status'],
-        userId: data['user_id']);
+        patent: data?['patent'],
+        category: data?['category'],
+        status: data?['status'],
+        userId: data?['user_id']);
   }
 
   factory Pickup.fromJson(Map<String, dynamic> json) {

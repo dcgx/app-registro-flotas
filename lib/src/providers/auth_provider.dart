@@ -2,14 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:fleeve/src/models/user.dart';
 
 class AuthProvider extends ChangeNotifier {
-  User _user = new User();
+  User? _user;
 
-  get user {
+  User? get user {
     return _user;
   }
 
-  set user(User user) {
+  set user(User? user) {
     this._user = user;
+    notifyListeners();
   }
 
   bool get isAuthenticated {
@@ -17,9 +18,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void login(User user) {
-    this._user = user;
-    // This call tells the widgets that are listening to this model to rebuild.
-    notifyListeners();
+    this.user = user;
   }
 
   void logout() {

@@ -6,7 +6,7 @@ import 'package:fleeve/src/ui/widgets/multi_select_chip.dart';
 import 'package:flutter/material.dart';
 
 class UserDetailsScreen extends StatefulWidget {
-  const UserDetailsScreen({Key key}) : super(key: key);
+  const UserDetailsScreen({Key? key}) : super(key: key);
 
   @override
   _UserDetailsScreenState createState() => _UserDetailsScreenState();
@@ -18,7 +18,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     "Administrador",
   ];
 
-  List<String> selectedRoleList = List();
+  List<String> selectedRoleList = [];
 
   _showReportDialog() {
     showDialog(
@@ -36,7 +36,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               },
             ),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text("Aceptar"),
                 onPressed: () => Navigator.of(context).pop(),
               )
@@ -74,9 +74,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                           labelText: 'Nombre y apellido *',
                           hintText: ''),
                       validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Rellenar todos los campos';
-                        }
+                        // if (value.isEmpty) {
+                        //   return 'Rellenar todos los campos';
+                        // }
                         return null;
                       },
                     ),
@@ -87,9 +87,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                           labelText: 'Número de teléfono *',
                           hintText: '9XXXXXXXX'),
                       validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Rellenar todos los campos';
-                        }
+                        // if (value.isEmpty) {
+                        //   return 'Rellenar todos los campos';
+                        // }
                         return null;
                       },
                     ),
@@ -116,7 +116,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     //     );
                     //   }).toList(),
                     // ),
-                    RaisedButton(
+                    TextButton(
                       child: Text("Roles"),
                       onPressed: () => _showReportDialog(),
                     ),
@@ -125,8 +125,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               ),
               onPressedOk: () {
                 {
-                  if (_formKey.currentState.validate()) {
-                    List valueRoleList = List();
+                  if (_formKey.currentState!.validate()) {
+                    List<String> valueRoleList = [];
                     selectedRoleList.forEach((role) {
                       if (role == 'Administrador') {
                         valueRoleList.add('admin');
@@ -155,7 +155,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 }
 
 class Body extends StatelessWidget {
-  const Body({Key key}) : super(key: key);
+  const Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -181,9 +181,9 @@ class Body extends StatelessWidget {
 
           return Container(
             child: ListView.builder(
-                itemCount: snapshot.data.length,
+                itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
-                  User user = snapshot.data[index];
+                  User user = snapshot.data![index];
                   return ListTile(
                     leading: Icon(Icons.person),
                     title: Text(user.name),
