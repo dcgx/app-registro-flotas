@@ -21,43 +21,57 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      // Initialize FlutterFirex
-      future: Future.delayed(const Duration(seconds: 2), () async {
-        print('init');
-      }),
-      // future: Firebase.initializeApp(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        // Check for errors
-        print(snapshot.connectionState);
-        if (snapshot.hasError) {
-          print(snapshot);
-          return Container();
-        }
+    return MaterialApp(
+        title: 'Flutter Demo',
+        theme: theme(),
+        // home: HomeScreen(),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        supportedLocales: const [Locale('es', '')],
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const HomeScreen(),
+        });
+    // return FutureBuilder(
+    //   // Initialize FlutterFirex
+    //   future: Future.delayed(const Duration(seconds: 2), () async {
+    //     print('init');
+    //   }),
+    //   // future: Firebase.initializeApp(),
+    //   builder: (BuildContext context, AsyncSnapshot snapshot) {
+    //     // Check for errors
+    //     print(snapshot.connectionState);
+    //     if (snapshot.hasError) {
+    //       print(snapshot);
+    //       return Container();
+    //     }
 
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MaterialApp(
-              title: 'Flutter Demo',
-              theme: theme(),
-              // home: HomeScreen(),
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate
-              ],
-              supportedLocales: const [Locale('es', '')],
-              initialRoute: '/',
-              routes: {
-                '/': (context) => HomeScreen(),
-                '/admin': (context) => const AdminScreen(),
-                '/reservation': (context) => const ReservationScreen()
-              });
-        }
+    //     // Once complete, show your application
+    //     if (snapshot.connectionState == ConnectionState.done) {
+    //       return MaterialApp(
+    //           title: 'Flutter Demo',
+    //           theme: theme(),
+    //           // home: HomeScreen(),
+    //           localizationsDelegates: const [
+    //             GlobalMaterialLocalizations.delegate,
+    //             GlobalWidgetsLocalizations.delegate,
+    //             GlobalCupertinoLocalizations.delegate
+    //           ],
+    //           supportedLocales: const [Locale('es', '')],
+    //           initialRoute: '/',
+    //           routes: {
+    //             '/': (context) => HomeScreen(),
+    //             '/admin': (context) => const AdminScreen(),
+    //             '/reservation': (context) => const ReservationScreen()
+    //           });
+    //     }
 
-        // Otherwise, show something whilst waiting for initialization to complete
-        return Container(); // Loading
-      },
-    );
+    //     // Otherwise, show something whilst waiting for initialization to complete
+    //     return Container(); // Loading
+    //   },
+    // );
   }
 }
