@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fleeve/src/models/user.dart';
+import 'package:flit_app/src/models/user.dart';
 
 class AuthProvider extends ChangeNotifier {
   User? _user;

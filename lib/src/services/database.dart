@@ -3,9 +3,9 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:fleeve/src/models/hour.dart';
-import 'package:fleeve/src/models/pickup.dart';
-import 'package:fleeve/src/models/user.dart';
+import 'package:flit_app/src/models/hour.dart';
+import 'package:flit_app/src/models/pickup.dart';
+import 'package:flit_app/src/models/user.dart';
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;

@@ -1,11 +1,11 @@
-import 'package:fleeve/src/ui/screens/details/pickup_details_screen.dart';
-import 'package:fleeve/src/ui/screens/details/user_details_screen.dart';
-import 'package:fleeve/src/ui/screens/reservation/reservation_screen.dart';
+import 'package:flit_app/src/ui/screens/details/pickup_details_screen.dart';
+import 'package:flit_app/src/ui/screens/details/user_details_screen.dart';
+import 'package:flit_app/src/ui/screens/reservation/reservation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:fleeve/src/ui/constants.dart';
-import 'package:fleeve/src/providers/auth_provider.dart';
+import 'package:flit_app/src/ui/constants.dart';
+import 'package:flit_app/src/providers/auth_provider.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -16,16 +16,16 @@ class Body extends StatelessWidget {
 
     return Column(
       children: [
-        Image(
+        const Image(
           width: 200,
           image: AssetImage('assets/img/logo.png'),
         ),
-        Text(currentUser!.name,
+        Text('Bienvenido ${currentUser?.name}',
             style: TextStyle(
                 fontSize: Theme.of(context).textTheme.displayLarge!.fontSize,
                 fontWeight: Theme.of(context).textTheme.displayLarge!.fontWeight)),
         Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: GridView.count(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -40,18 +40,18 @@ class Body extends StatelessWidget {
                     icon: Icons.schedule,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) =>
-                            ReservationScreen()))),
+                            const ReservationScreen()))),
                 _buildGrid(
                     title: 'Detalle de camionetas',
                     icon: Icons.drive_eta,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) =>
-                            PickupDetailsScreen()))),
+                            const PickupDetailsScreen()))),
                 _buildGrid(
                   title: 'Detalle de choreres',
                   icon: Icons.people,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => UserDetailsScreen())),
+                      builder: (BuildContext context) => const UserDetailsScreen())),
                 ),
                 _buildGrid(
                     title: 'Uso diario',
@@ -68,8 +68,10 @@ class Body extends StatelessWidget {
       @required IconData? icon,
       @required Function? onTap}) {
     return GestureDetector(
+      onTap: onTap as void Function()?,
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
+        color: primaryColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -78,7 +80,7 @@ class Body extends StatelessWidget {
               child: Text(
                 title ?? '',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.w400),
@@ -86,9 +88,7 @@ class Body extends StatelessWidget {
             ),
           ],
         ),
-        color: primaryColor,
       ),
-      onTap: onTap as void Function()?,
     );
   }
 }

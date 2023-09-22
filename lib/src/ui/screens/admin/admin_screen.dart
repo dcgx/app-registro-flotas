@@ -1,6 +1,6 @@
-import 'package:fleeve/src/providers/auth_provider.dart';
+import 'package:flit_app/src/providers/auth_provider.dart';
 
-import 'package:fleeve/src/ui/screens/admin/widgets/body.dart';
+import 'package:flit_app/src/ui/screens/admin/widgets/body.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

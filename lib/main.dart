@@ -1,29 +1,35 @@
-import 'package:fleeve/src/ui/screens/reservation/reservation_screen.dart';
+import 'package:flit_app/src/ui/screens/reservation/reservation_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:fleeve/src/providers/auth_provider.dart';
-import 'package:fleeve/src/ui/screens/admin/admin_screen.dart';
+import 'package:flit_app/src/providers/auth_provider.dart';
+import 'package:flit_app/src/ui/screens/admin/admin_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:fleeve/src/ui/theme.dart';
-import 'package:fleeve/src/ui/screens/home/home_screen.dart';
+import 'package:flit_app/src/ui/theme.dart';
+import 'package:flit_app/src/ui/screens/home/home_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
     create: (context) => AuthProvider(),
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       // Initialize FlutterFirex
-      future: Firebase.initializeApp(),
+      future: Future.delayed(const Duration(seconds: 2), () async {
+        print('init');
+      }),
+      // future: Firebase.initializeApp(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         // Check for errors
+        print(snapshot.connectionState);
         if (snapshot.hasError) {
           print(snapshot);
           return Container();
@@ -35,17 +41,17 @@ class MyApp extends StatelessWidget {
               title: 'Flutter Demo',
               theme: theme(),
               // home: HomeScreen(),
-              localizationsDelegates: [
+              localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate
               ],
-              supportedLocales: [const Locale('es', '')],
+              supportedLocales: const [Locale('es', '')],
               initialRoute: '/',
               routes: {
                 '/': (context) => HomeScreen(),
-                '/admin': (context) => AdminScreen(),
-                '/reservation': (context) => ReservationScreen()
+                '/admin': (context) => const AdminScreen(),
+                '/reservation': (context) => const ReservationScreen()
               });
         }
 

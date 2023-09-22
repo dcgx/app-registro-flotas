@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fleeve/src/models/pickup.dart';
+import 'package:flit_app/src/models/pickup.dart';
 
 class PickupCard extends StatelessWidget {
   final Pickup pickup;
@@ -29,7 +29,7 @@ class PickupCard extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Center(
               child: Text(
-                this.pickup.patent,
+                pickup.patent ?? "",
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width / 12,
                   fontWeight: FontWeight.bold,
@@ -42,7 +42,7 @@ class PickupCard extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Center(
               child: Text(
-                this.pickup.category,
+                pickup.category ?? "",
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width / 18,
                 ),

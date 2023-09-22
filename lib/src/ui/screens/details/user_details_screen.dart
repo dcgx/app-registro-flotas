@@ -1,8 +1,8 @@
-import 'package:fleeve/src/models/user.dart';
-import 'package:fleeve/src/services/database.dart';
-import 'package:fleeve/src/ui/screens/details/widgets/user_history.dart';
-import 'package:fleeve/src/ui/widgets/dialog.dart';
-import 'package:fleeve/src/ui/widgets/multi_select_chip.dart';
+import 'package:flit_app/src/models/user.dart';
+import 'package:flit_app/src/services/database.dart';
+import 'package:flit_app/src/ui/screens/details/widgets/user_history.dart';
+import 'package:flit_app/src/ui/widgets/dialog.dart';
+import 'package:flit_app/src/ui/widgets/multi_select_chip.dart';
 import 'package:flutter/material.dart';
 
 class UserDetailsScreen extends StatefulWidget {
@@ -26,7 +26,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         builder: (BuildContext context) {
           //Here we will build the content of the dialog
           return AlertDialog(
-            title: Text("Seleccionar roles"),
+            title: const Text("Seleccionar roles"),
             content: MultiSelectChip(
               roleList,
               onSelectionChanged: (selectedList) {
@@ -37,7 +37,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             ),
             actions: <Widget>[
               TextButton(
-                child: Text("Aceptar"),
+                child: const Text("Aceptar"),
                 onPressed: () => Navigator.of(context).pop(),
               )
             ],
@@ -47,28 +47,28 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _userNameController = TextEditingController();
-    TextEditingController _userPhoneController = TextEditingController();
+    TextEditingController userNameController = TextEditingController();
+    TextEditingController userPhoneController = TextEditingController();
     DatabaseService db = DatabaseService();
 
     return Scaffold(
       appBar: AppBar(),
-      body: Body(),
+      body: const Body(),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
-          final _formKey = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
 
           AppDialog(
               context: context,
               dialogType: DialogType.FORM,
-              title: Text('Agregar una camioneta'),
+              title: const Text('Agregar una camioneta'),
               body: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   children: [
                     TextFormField(
-                      controller: _userNameController,
+                      controller: userNameController,
                       decoration: const InputDecoration(
                           icon: Icon(Icons.drive_eta),
                           labelText: 'Nombre y apellido *',
@@ -81,7 +81,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                       },
                     ),
                     TextFormField(
-                      controller: _userPhoneController,
+                      controller: userPhoneController,
                       decoration: const InputDecoration(
                           icon: Icon(Icons.layers),
                           labelText: 'Número de teléfono *',
@@ -117,7 +117,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     //   }).toList(),
                     // ),
                     TextButton(
-                      child: Text("Roles"),
+                      child: const Text("Roles"),
                       onPressed: () => _showReportDialog(),
                     ),
                   ],
@@ -125,19 +125,19 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               ),
               onPressedOk: () {
                 {
-                  if (_formKey.currentState!.validate()) {
+                  if (formKey.currentState!.validate()) {
                     List<String> valueRoleList = [];
-                    selectedRoleList.forEach((role) {
+                    for (var role in selectedRoleList) {
                       if (role == 'Administrador') {
                         valueRoleList.add('admin');
                       }
                       if (role == 'Chofer') {
                         valueRoleList.add('driver');
                       }
-                    });
+                    }
                     User user = User(
-                        name: _userNameController.text,
-                        phone: _userPhoneController.text,
+                        name: userNameController.text,
+                        phone: userPhoneController.text,
                         roles: valueRoleList);
 
                     db.addUser(user).whenComplete(() => Navigator.pop(context));
@@ -147,7 +147,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   }
                 }
               })
-            ..show();
+            .show();
         },
       ),
     );
@@ -168,13 +168,13 @@ class Body extends StatelessWidget {
             print("has error");
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
           if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: Text('No se han encontrado datos'),
             );
           }
@@ -185,9 +185,9 @@ class Body extends StatelessWidget {
                 itemBuilder: (context, index) {
                   User user = snapshot.data![index];
                   return ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text(user.name),
-                    subtitle: Text(user.phone),
+                    leading: const Icon(Icons.person),
+                    title: Text(user.name ?? ''),
+                    subtitle: Text(user.phone ?? ''),
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -1,8 +1,8 @@
-import 'package:fleeve/src/ui/constants.dart';
-import 'package:fleeve/src/models/hour.dart';
-import 'package:fleeve/src/models/user.dart';
-import 'package:fleeve/src/services/database.dart';
-import 'package:fleeve/src/ui/screens/details/widgets/user_table.dart';
+import 'package:flit_app/src/ui/constants.dart';
+import 'package:flit_app/src/models/hour.dart';
+import 'package:flit_app/src/models/user.dart';
+import 'package:flit_app/src/services/database.dart';
+import 'package:flit_app/src/ui/screens/details/widgets/user_table.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -25,13 +25,13 @@ class _UserHistoryState extends State<UserHistory> {
 
   DateTime selectedDate = DateTime.now();
 
-  TextEditingController _dateController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
-  Future<Null> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      locale: Locale('es', ''),
+      locale: const Locale('es', ''),
       initialDatePickerMode: DatePickerMode.day,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
@@ -57,7 +57,7 @@ class _UserHistoryState extends State<UserHistory> {
     _height = MediaQuery.of(context).size.height;
     _width = MediaQuery.of(context).size.width;
     dateTime = DateFormat.yMd().format(DateTime.now());
-    User user = this.widget.user;
+    User user = widget.user;
 
     String userName = user.name ?? "Usuario Desconocido"; // Safely access user.name
 
@@ -66,7 +66,7 @@ class _UserHistoryState extends State<UserHistory> {
       body: Container(
         child: Column(
           children: [
-            Text('Registro de horas'),
+            const Text('Registro de horas'),
             Text("Usuario: $userName"), // Use userName
             InkWell(
               onTap: () {
@@ -77,13 +77,13 @@ class _UserHistoryState extends State<UserHistory> {
               child: Container(
                 width: _width! / 2,
                 height: _height! / 14,
-                margin: EdgeInsets.only(top: 15),
+                margin: const EdgeInsets.only(top: 15),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     color: primaryColor,
                     borderRadius: BorderRadius.circular(50)),
                 child: TextFormField(
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  style: const TextStyle(fontSize: 20, color: Colors.white),
                   textAlign: TextAlign.center,
                   enabled: false,
                   keyboardType: TextInputType.text,
@@ -91,7 +91,7 @@ class _UserHistoryState extends State<UserHistory> {
                   onSaved: (String? val) {
                     _setDate = val!;
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       disabledBorder:
                           UnderlineInputBorder(borderSide: BorderSide.none),
                       contentPadding: EdgeInsets.only(top: 0.0)),
@@ -99,7 +99,7 @@ class _UserHistoryState extends State<UserHistory> {
               ),
             ),
             StreamBuilder<List<Hour>>(
-                stream: db.streamUserHours(selectedDate, user.id),
+                stream: db.streamUserHours(selectedDate, user.id ?? ""),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     print("has error");
@@ -107,11 +107,11 @@ class _UserHistoryState extends State<UserHistory> {
 
                   if (snapshot.connectionState == ConnectionState.waiting ||
                       snapshot.data == null) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
 
                   if (!snapshot.hasData) {
-                    return Center(
+                    return const Center(
                       child: Text('No existen registros con esta fecha'),
                     );
                   }

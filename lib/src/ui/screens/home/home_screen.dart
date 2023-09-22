@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fleeve/src/ui/screens/home/widgets/body.dart';
+import 'package:flit_app/src/ui/screens/home/widgets/body.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);

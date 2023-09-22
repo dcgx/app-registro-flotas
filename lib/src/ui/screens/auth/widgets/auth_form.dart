@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fleeve/src/models/user.dart';
-import 'package:fleeve/src/providers/auth_provider.dart';
-import 'package:fleeve/src/services/authentication.dart';
-import 'package:fleeve/src/ui/constants.dart';
-import 'package:fleeve/src/ui/screens/reservation/reservation_screen.dart';
-import 'package:fleeve/src/ui/widgets/dialog.dart';
-import 'package:fleeve/src/utils/helpers.dart';
+import 'package:flit_app/src/models/user.dart';
+import 'package:flit_app/src/providers/auth_provider.dart';
+import 'package:flit_app/src/services/authentication.dart';
+import 'package:flit_app/src/ui/constants.dart';
+import 'package:flit_app/src/ui/screens/reservation/reservation_screen.dart';
+import 'package:flit_app/src/ui/widgets/dialog.dart';
+import 'package:flit_app/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AuthForm extends StatefulWidget {
-  AuthForm({Key? key}) : super(key: key);
+  const AuthForm({Key? key}) : super(key: key);
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -27,7 +27,7 @@ class _AuthFormState extends State<AuthForm> {
 
   var outlineInputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(10.0),
-    borderSide: BorderSide(color: Colors.transparent),
+    borderSide: const BorderSide(color: Colors.transparent),
   );
 
   int numberIndex = 0;
@@ -57,10 +57,6 @@ class _AuthFormState extends State<AuthForm> {
 
   Widget _buildLoginButton() {
     return TextButton(
-        child: Text(
-          'Entrar',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -78,14 +74,18 @@ class _AuthFormState extends State<AuthForm> {
               //   signIn(password);
               // }
             } else {
-              AppDialog(context: context, dialogType: DialogType.INFO)..show();
+              AppDialog(context: context, dialogType: DialogType.INFO).show();
             }
           });
-        });
+        },
+        child: const Text(
+          'Entrar',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ));
   }
 
   Future<void> signIn(String password) async {
-    AppDialog(context: context, dialogType: DialogType.LOADING)..show();
+    AppDialog(context: context, dialogType: DialogType.LOADING).show();
 
     auth.signIn(this.password!).then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.first.exists) {
@@ -97,33 +97,33 @@ class _AuthFormState extends State<AuthForm> {
 
         Provider.of<AuthProvider>(context).user = user;
 
-        if (user.roles.contains('admin')) {
+        if (user.roles!.contains('admin')) {
           Navigator.popAndPushNamed(context, '/admin')
               .then((_) => clearPassInput());
-        } else if (user.roles.contains('driver')) {
+        } else if (user.roles!.contains('driver')) {
           Navigator.of(context)
               .push(
-                  MaterialPageRoute(builder: (context) => ReservationScreen()))
+                  MaterialPageRoute(builder: (context) => const ReservationScreen()))
               .then((_) {
             clearPassInput();
-            AppDialog(context: context)..close();
+            AppDialog(context: context).close();
           });
         }
       }
     }).catchError((error) {
       print(error);
-      AppDialog(context: context)..close();
+      AppDialog(context: context).close();
       clearPassInput();
       if (error.toString() == "Bad state: No element") {
         showSnackBar(
             context: context,
             message: 'Contraseña incorrecta',
-            icon: Icon(Icons.error));
+            icon: const Icon(Icons.error));
       } else {
         showSnackBar(
             context: context,
             message: 'Error inesperado',
-            icon: Icon(Icons.error));
+            icon: const Icon(Icons.error));
       }
     });
   }
@@ -173,7 +173,7 @@ class _AuthFormState extends State<AuthForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Container(
+                const SizedBox(
                   width: 60.0,
                   child: MaterialButton(
                     color: Colors.white,
@@ -182,7 +182,7 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                 ),
                 KeyboardNumber(n: 0, onPressed: () => _passIndexSetup("0")),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width / 6,
                   child: MaterialButton(
                     height: 60.0,
@@ -191,7 +191,7 @@ class _AuthFormState extends State<AuthForm> {
                     onPressed: () {
                       _backspacePassButton();
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.backspace,
                       color: Colors.black,
                     ),
@@ -206,9 +206,9 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   void _backspacePassButton() {
-    if (numberIndex == 0)
+    if (numberIndex == 0) {
       numberIndex = 0;
-    else if (numberIndex == 4) {
+    } else if (numberIndex == 4) {
       _setPass(numberIndex, "");
       currentPassword[numberIndex - 1] = "";
       numberIndex--;
@@ -228,9 +228,9 @@ class _AuthFormState extends State<AuthForm> {
     _setPass(numberIndex, text);
     currentPassword[numberIndex - 1] = text;
     String strNumber = "";
-    currentPassword.forEach((e) {
+    for (var e in currentPassword) {
       strNumber += e;
-    });
+    }
     password = strNumber;
   }
 
@@ -275,11 +275,11 @@ class _AuthFormState extends State<AuthForm> {
 class PasswordNumber extends StatelessWidget {
   final TextEditingController textEditingController;
   final OutlineInputBorder outlineInputBorder;
-  PasswordNumber({required this.textEditingController, required this.outlineInputBorder});
+  const PasswordNumber({super.key, required this.textEditingController, required this.outlineInputBorder});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width / 6,
       height: MediaQuery.of(context).size.height / 10,
       child: TextField(
@@ -288,12 +288,12 @@ class PasswordNumber extends StatelessWidget {
         obscureText: true,
         textAlign: TextAlign.center,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(16.0),
+          contentPadding: const EdgeInsets.all(16.0),
           border: outlineInputBorder,
           filled: true,
           fillColor: Colors.white30,
         ),
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 40.0,
           color: Colors.black,
@@ -306,19 +306,19 @@ class PasswordNumber extends StatelessWidget {
 class KeyboardNumber extends StatelessWidget {
   final int n;
   final Function() onPressed;
-  KeyboardNumber({required this.n, required this.onPressed});
+  const KeyboardNumber({super.key, required this.n, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width / 5,
       height: MediaQuery.of(context).size.height / 12,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,
       child: MaterialButton(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         onPressed: onPressed,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(60.0),

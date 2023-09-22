@@ -1,4 +1,4 @@
-import 'package:fleeve/src/ui/screens/auth/widgets/auth_form.dart';
+import 'package:flit_app/src/ui/screens/auth/widgets/auth_form.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatefulWidget {

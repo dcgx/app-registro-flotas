@@ -1,9 +1,9 @@
-import 'package:fleeve/src/ui/constants.dart';
+import 'package:flit_app/src/ui/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:fleeve/src/models/pickup.dart';
-import 'package:fleeve/src/providers/auth_provider.dart';
-import 'package:fleeve/src/services/database.dart';
-import 'package:fleeve/src/ui/widgets/dialog.dart';
+import 'package:flit_app/src/models/pickup.dart';
+import 'package:flit_app/src/providers/auth_provider.dart';
+import 'package:flit_app/src/services/database.dart';
+import 'package:flit_app/src/ui/widgets/dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 

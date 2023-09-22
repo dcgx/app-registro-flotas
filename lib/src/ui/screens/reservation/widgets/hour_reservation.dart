@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:fleeve/src/models/pickup.dart';
-import 'package:fleeve/src/models/hour.dart';
-import 'package:fleeve/src/services/database.dart';
-import 'package:fleeve/src/ui/widgets/pickup_card.dart';
-import 'package:fleeve/src/ui/screens/reservation/widgets/confirm_button.dart';
-import 'package:fleeve/src/ui/screens/reservation/widgets/hour_list.dart';
-import 'package:fleeve/src/ui/constants.dart';
+import 'package:flit_app/src/models/pickup.dart';
+import 'package:flit_app/src/models/hour.dart';
+import 'package:flit_app/src/services/database.dart';
+import 'package:flit_app/src/ui/widgets/pickup_card.dart';
+import 'package:flit_app/src/ui/screens/reservation/widgets/confirm_button.dart';
+import 'package:flit_app/src/ui/screens/reservation/widgets/hour_list.dart';
+import 'package:flit_app/src/ui/constants.dart';
 
 class HourReservation extends StatelessWidget {
   final Pickup pickup;
@@ -20,7 +20,7 @@ class HourReservation extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Elegir una hora'),
+        title: const Text('Elegir una hora'),
       ),
       body: Body(
         selectedHours: selectedHours,
@@ -33,7 +33,7 @@ class HourReservation extends StatelessWidget {
             width: 150,
             child: TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Icon(Icons.arrow_back),
@@ -56,7 +56,7 @@ class Body extends StatefulWidget {
   final List<int> selectedHours;
   final Pickup pickup;
 
-  Body({Key? key, required this.selectedHours, required this.pickup}) : super(key: key);
+  const Body({Key? key, required this.selectedHours, required this.pickup}) : super(key: key);
 
   @override
   _BodyState createState() => _BodyState();
@@ -73,21 +73,23 @@ class _BodyState extends State<Body> {
     String currentDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
 
     return StreamBuilder<List<Hour>>(
-      stream: db.streamHours(this.widget.pickup),
+      stream: db.streamHours(widget.pickup),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print("has error");
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         hours = snapshot.data ?? [];
 
-        hours.forEach((hour) {
-          totalHoursByDate[hour.hour - 8] = hour;
-        });
+        for (var hour in hours) {
+          if(hour.hour != null) {
+            totalHoursByDate[hour.hour! - 8] = hour;
+          }
+        }
 
         return Container(
           child: Column(
@@ -99,7 +101,7 @@ class _BodyState extends State<Body> {
                     width: 190,
                     height: 75,
                     child: PickupCard(
-                      pickup: this.widget.pickup,
+                      pickup: widget.pickup,
                     ),
                   ),
                   Column(
@@ -107,7 +109,7 @@ class _BodyState extends State<Body> {
                     children: [
                       _buildHeaderTitle(
                         title: '$currentTime h.',
-                        icon: Icon(Icons.watch_later_outlined),
+                        icon: const Icon(Icons.watch_later_outlined),
                       ),
                       _buildHeaderTitle(title: currentDate),
                     ],
@@ -115,7 +117,7 @@ class _BodyState extends State<Body> {
                 ],
               ),
               HourList(
-                selectedHours: this.widget.selectedHours,
+                selectedHours: widget.selectedHours,
                 totalHoursByDate: totalHoursByDate,
                 pickup: widget.pickup,
               ),
@@ -129,10 +131,10 @@ class _BodyState extends State<Body> {
   Widget _buildHeaderTitle({String? title, Icon? icon}) {
     return Row(
       children: [
-        icon ?? Text(''),
+        icon ?? const Text(''),
         Text(
           title ?? '',
-          style: TextStyle(
+          style: const TextStyle(
             color: primaryColor,
             fontSize: 22,
             fontWeight: FontWeight.w500,

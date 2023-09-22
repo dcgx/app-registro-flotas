@@ -1,9 +1,9 @@
-import 'package:fleeve/src/models/user.dart';
+import 'package:flit_app/src/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:fleeve/src/services/database.dart';
-import 'package:fleeve/src/models/hour.dart';
+import 'package:flit_app/src/services/database.dart';
+import 'package:flit_app/src/models/hour.dart';
 
 class PickupTable extends StatelessWidget {
   final DateTime date;
@@ -16,7 +16,7 @@ class PickupTable extends StatelessWidget {
     return Flexible(
       child: Column(
         children: [
-          ListTile(
+          const ListTile(
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -32,7 +32,7 @@ class PickupTable extends StatelessWidget {
                 itemBuilder: (context, index) {
                   // Retora la informacion del usuario que tomó la hora
                   return StreamBuilder<User>(
-                      stream: db.streamUserById(hours[index].userId),
+                      stream: db.streamUserById(hours[index].userId ?? ''),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           print("has error");
@@ -40,7 +40,7 @@ class PickupTable extends StatelessWidget {
 
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
+                          return const Center(child: CircularProgressIndicator());
                         }
                         User user = snapshot.data!;
                         String formattedDate;
@@ -50,16 +50,16 @@ class PickupTable extends StatelessWidget {
                               DateFormat('d/MMM/yyyy', 'es').format(date);
                         } else {
                           formattedDate = DateFormat('d/MMM/yyyy', 'es')
-                              .format(hours[index].date);
+                              .format(hours[index].date ?? DateTime.now());
                         }
 
                         return ListTile(
                             title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("$formattedDate"),
+                            Text(formattedDate),
                             Text("${hours[index].hour.toString()}:00"),
-                            Text(user.name),
+                            Text(user.name ?? ''),
                           ],
                         ));
                       });

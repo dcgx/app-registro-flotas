@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:fleeve/src/services/database.dart';
+import 'package:flit_app/src/services/database.dart';
 
-import 'package:fleeve/src/models/hour.dart';
-import 'package:fleeve/src/models/pickup.dart';
+import 'package:flit_app/src/models/hour.dart';
+import 'package:flit_app/src/models/pickup.dart';
 
 class UserTable extends StatelessWidget {
   final DateTime date;
@@ -17,7 +17,7 @@ class UserTable extends StatelessWidget {
     return Flexible(
       child: Column(
         children: [
-          ListTile(
+          const ListTile(
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -33,7 +33,7 @@ class UserTable extends StatelessWidget {
                 itemBuilder: (context, index) {
                   // Retora la informacion de la camioneta que el usuario tomó
                   return StreamBuilder<Pickup>(
-                      stream: db.streamPickupById(hours[index].pickupId),
+                      stream: db.streamPickupById(hours[index].pickupId ?? ''),
                       builder: (context, snapshot) {
                         String formattedDate =
                             DateFormat('d/MMM/yyyy', 'es').format(date);
@@ -44,16 +44,16 @@ class UserTable extends StatelessWidget {
 
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
+                          return const Center(child: CircularProgressIndicator());
                         }
                         Pickup pickup = snapshot.data!;
                         return ListTile(
                             title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("$formattedDate"),
+                            Text(formattedDate),
                             Text("${hours[index].hour.toString()}:00"),
-                            Text(pickup.patent),
+                            Text(pickup.patent ?? ''),
                           ],
                         ));
                       });

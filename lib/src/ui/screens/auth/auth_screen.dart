@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:fleeve/src/ui/screens/auth/widgets/body.dart';
+import 'package:flit_app/src/ui/screens/auth/widgets/body.dart';
 
 class AuthScreen extends StatefulWidget {
   AuthScreen({Key? key}) : super(key: key);

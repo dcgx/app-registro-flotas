@@ -1,13 +1,13 @@
-import 'package:fleeve/src/models/hour.dart';
-import 'package:fleeve/src/models/pickup.dart';
-import 'package:fleeve/src/ui/screens/details/widgets/pickup_table.dart';
-import 'package:fleeve/src/ui/widgets/dialog.dart';
-import 'package:fleeve/src/utils/helpers.dart';
+import 'package:flit_app/src/models/hour.dart';
+import 'package:flit_app/src/models/pickup.dart';
+import 'package:flit_app/src/ui/screens/details/widgets/pickup_table.dart';
+import 'package:flit_app/src/ui/widgets/dialog.dart';
+import 'package:flit_app/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:fleeve/src/ui/constants.dart';
-import 'package:fleeve/src/services/database.dart';
+import 'package:flit_app/src/ui/constants.dart';
+import 'package:flit_app/src/services/database.dart';
 
 class PickupHistory extends StatefulWidget {
   final Pickup pickup;
@@ -23,9 +23,9 @@ class _PickupHistoryState extends State<PickupHistory> {
 
   String _setDate = 'Ingrese una fecha';
   String dateTime = DateFormat.yMd().format(DateTime.now());
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _patentController = TextEditingController();
-  TextEditingController _categoryController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _patentController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
 
   DateTime? selectedDate;
 
@@ -49,8 +49,8 @@ class _PickupHistoryState extends State<PickupHistory> {
   @override
   void initState() {
     super.initState();
-    _patentController.text = widget.pickup.patent;
-    _categoryController.text = widget.pickup.category;
+    _patentController.text = widget.pickup.patent ?? '';
+    _categoryController.text = widget.pickup.category ?? '';
   }
 
   @override
@@ -66,11 +66,11 @@ class _PickupHistoryState extends State<PickupHistory> {
       body: Container(
         child: Column(
           children: [
-            Text('Registro de horas'),
+            const Text('Registro de horas'),
             Row(
               children: [
                 Text('Patente: ${pickup.patent}'),
-                Text(pickup.category),
+                Text(pickup.category ?? ''),
               ],
             ),
             Row(
@@ -91,7 +91,7 @@ class _PickupHistoryState extends State<PickupHistory> {
                         _dateController.text = 'Ingrese una fecha';
                       });
                     },
-                    child: Text(
+                    child: const Text(
                       'Mostrar todo',
                       style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
@@ -111,7 +111,7 @@ class _PickupHistoryState extends State<PickupHistory> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: TextFormField(
-                      style: TextStyle(fontSize: 20, color: Colors.white),
+                      style: const TextStyle(fontSize: 20, color: Colors.white),
                       textAlign: TextAlign.center,
                       enabled: false,
                       keyboardType: TextInputType.text,
@@ -119,9 +119,9 @@ class _PickupHistoryState extends State<PickupHistory> {
                       onSaved: (String? val) {
                         _setDate = val!;
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         disabledBorder: InputBorder.none,
-                        contentPadding: const EdgeInsets.only(top: 0.0),
+                        contentPadding: EdgeInsets.only(top: 0.0),
                       ),
                     ),
                   ),
@@ -129,18 +129,18 @@ class _PickupHistoryState extends State<PickupHistory> {
               ],
             ),
             StreamBuilder<List<Hour>>(
-              stream: db.streamPickupHours(selectedDate!, pickup.id),
+              stream: db.streamPickupHours(selectedDate!, pickup.id ?? ''),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   print('has error');
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 if (!snapshot.hasData) {
-                  return Center(
+                  return const Center(
                     child: Text('No existen registros con esta fecha'),
                   );
                 }
@@ -153,16 +153,16 @@ class _PickupHistoryState extends State<PickupHistory> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.edit),
+        child: const Icon(Icons.edit),
         onPressed: () {
-          final _formKey = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
 
           AppDialog(
             context: context,
             dialogType: DialogType.FORM,
-            title: Text('Editar datos'),
+            title: const Text('Editar datos'),
             body: Form(
-              key: _formKey,
+              key: formKey,
               child: Column(
                 children: [
                   TextFormField(
@@ -201,7 +201,7 @@ class _PickupHistoryState extends State<PickupHistory> {
               ),
             ),
             onPressedOk: () {
-              if (_formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 final pickup = Pickup(
                   id: widget.pickup.id,
                   patent: _patentController.text.toUpperCase(),
@@ -212,12 +212,12 @@ class _PickupHistoryState extends State<PickupHistory> {
                   showSnackBar(
                     context: context,
                     message: 'Datos actualizados correctamente',
-                    icon: Icon(Icons.check),
+                    icon: const Icon(Icons.check),
                   );
                 });
               }
             },
-          )..show();
+          ).show();
         },
       ),
     );
