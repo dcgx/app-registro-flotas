@@ -1,4 +1,4 @@
-package com.rhelsoft.fleeve
+package com.example.flit_app
 
 import io.flutter.embedding.android.FlutterActivity
 
